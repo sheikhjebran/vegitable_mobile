@@ -3,10 +3,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shop/login_screen.dart';
+import 'package:shop/view/login_screen.dart';
 import 'package:shop/util/constant.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => InitState();
 }
@@ -19,13 +21,13 @@ class InitState extends State<SplashScreen> {
   }
 
   startTimer() async {
-    var duration = Duration(seconds: 5);
+    var duration = const Duration(seconds: 5);
     return Timer(duration, loginRoute);
   }
 
   loginRoute() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -46,9 +48,7 @@ class InitState extends State<SplashScreen> {
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           ),
           Center(
-            child: Container(
-              child: Image.asset("images/logo.png"),
-            ),
+            child: Image.asset("images/logo.png"),
           )
         ],
       ),

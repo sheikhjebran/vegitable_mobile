@@ -1,13 +1,11 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:shop/view/home_screen.dart';
+import 'package:shop/service/apiClient.dart';
 import 'package:shop/util/constant.dart';
-import 'package:shop/util/config.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => InitState();
 }
@@ -18,13 +16,13 @@ class InitState extends State<LoginScreen> {
     return initWidget();
   }
 
-  Future getAuthentication() async {
-    var url = Config.serverUrl;
-    var resopnse = await http.get(url);
-    return json.decoder;
-  }
-
   Widget initWidget() {
+    var _apiClient = ApiClient();
+
+    // Variable Declaration
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -70,6 +68,7 @@ class InitState extends State<LoginScreen> {
                 ]),
             alignment: Alignment.center,
             child: TextField(
+              controller: usernameController,
               cursorColor: Constant.preimryColor,
               decoration: InputDecoration(
                   icon: Icon(
@@ -95,6 +94,7 @@ class InitState extends State<LoginScreen> {
                 ]),
             alignment: Alignment.center,
             child: TextField(
+              controller: passwordController,
               obscureText: true,
               cursorColor: Constant.preimryColor,
               decoration: InputDecoration(
@@ -108,7 +108,25 @@ class InitState extends State<LoginScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () => {},
+            onTap: () async {
+              String username = usernameController.text.trim();
+              String password = passwordController.text.trim();
+
+              if (username.isEmpty || password.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Invalid Username or Password"),
+                ));
+              } else {
+                // If user is valid then navigate to the next screen Home screen
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen(
+                              userId: 1,
+                              shopId: 1,
+                            )));
+              }
+            },
             child: Container(
                 height: 50,
                 margin: EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -126,14 +144,12 @@ class InitState extends State<LoginScreen> {
                           color: Constant.textBoxBackgroundColor)
                     ]),
                 alignment: Alignment.center,
-                child: Container(
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Constant.buttonFontsize),
-                  ),
+                child: Text(
+                  "Login",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Constant.buttonFontsize),
                 )),
           )
         ],
